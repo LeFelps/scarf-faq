@@ -1,6 +1,7 @@
 import { Lato } from "next/font/google"
-import Logo from "../../../public/Scarf-Horizontal-Logo-White-Small.png"
+import Logo from "../../../../public/Scarf-Horizontal-Logo-White-Small.png"
 import Image from "next/image"
+import PageButtons from "../page-buttons"
 
 const lato = Lato({ subsets: ['latin'], weight: '400' })
 
@@ -12,15 +13,7 @@ export default function Navbar({ transparent }: { transparent?: boolean }) {
                     <Image className="self-center" src={Logo.src} alt="Scarf logo" width={120} height={45} />
                 </a>
                 <div className="ml-auto h-16 flex">
-                    <a href="/" className="px-3 flex">
-                        <span className="self-center">Perguntas frequentes</span>
-                    </a>
-                    <a href="https://www.scarf.gg/quem-somos/" className="px-3 flex">
-                        <span className="self-center">Quem somos</span>
-                    </a>
-                    <a href="https://www.scarf.gg/contato/" className="px-3 flex">
-                        <span className="self-center">Contato</span>
-                    </a>
+                    <PageButtons />
                 </div>
             </div>
         </div>

@@ -1,30 +1,51 @@
 "use client";
 
+import Spinner from "@/components/spinner";
 import { NewQuestion, Question } from "@/types/question";
 import axios from "axios";
-import Link from "next/link";
 import { useEffect, useState } from "react";
+import { toast } from 'react-toastify'
+
+import { useRouter } from "next/navigation";
 
 export default function QuestionForm({ id }: { id?: string }) {
 
     const [loadingQuestions, setLoadingQuestions] = useState<boolean>(false)
     const [loadingQuestionData, setLoadingQuestionData] = useState<boolean>(false)
+    const [saving, setSaving] = useState<boolean>(false)
     const [questions, setQuestions] = useState<Question[]>([])
     const [questionData, setQuestionData] = useState<NewQuestion>({
         title: "",
         description: ''
     })
 
-    useEffect(() => {
-        if (id !== null) axios.get(`${process.env.NEXT_PUBLIC_API_URL}/faq/${id}`)
-            .then(resp => {
-                setQuestionData(resp.data || [])
-            });
+    const router = useRouter()
 
+    useEffect(() => {
+        if (id != null) {
+            setLoadingQuestionData(true)
+            axios.get(`${process.env.NEXT_PUBLIC_API_URL}/faq/${id}`)
+                .then(resp => {
+                    setQuestionData(resp.data || [])
+                })
+                .catch((err) => {
+                    toast.error('Ocorreu um erro ao buscar dados da pergunta')
+                })
+                .finally(() => {
+                    setLoadingQuestionData(false)
+                });
+        }
+        setLoadingQuestions(true)
         axios.get(`${process.env.NEXT_PUBLIC_API_URL}/faq?flattened=true`)
             .then(resp => {
                 setQuestions(resp.data || [])
             })
+            .catch((err) => {
+                toast.error('Ocorreu um erro ao buscar lista de perguntas')
+            })
+            .finally(() => {
+                setLoadingQuestions(false)
+            });
     }, [])
 
     return (
@@ -34,19 +55,21 @@ export default function QuestionForm({ id }: { id?: string }) {
 
             const type = id != null ? 'put' : 'post'
 
-            setLoadingQuestionData(true)
+            setSaving(true)
             axios[type](`${process.env.NEXT_PUBLIC_API_URL}/faq`, questionData)
                 .then((resp) => {
-
+                    const newId = resp.data?._id
+                    setQuestionData(resp.data)
+                    toast.success('Pergunta criada com sucesso!')
+                    router.push(`question/${newId}`)
                 })
                 .catch((err) => {
                     console.error(err)
+                    toast.error('Ocorreu um erro ao salvar a pergunta')
                 })
                 .finally(() => {
-                    setLoadingQuestionData(false)
+                    setSaving(false)
                 })
-            //TODO add error and response handling
-
         }}>
             <div className="flex flex-wrap -mx-3 mb-6">
                 <div className="w-full px-3 mb-6">
@@ -82,7 +105,6 @@ export default function QuestionForm({ id }: { id?: string }) {
                 </div>
                 <div className="w-full px-3 mb-6">
                     <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="parent-input">
-                        
                         Seção Pai
                     </label>
                     <div className="relative">
@@ -98,7 +120,7 @@ export default function QuestionForm({ id }: { id?: string }) {
                             }} >
                             <option value="">Selecione uma opção</option>
                             {questions.map(question => (
-                                <option key={question.id} value={question.id}>{question.title}</option>
+                                <option key={question._id} value={question._id}>{question.title}</option>
                             ))}
                         </select>
                         <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
@@ -107,9 +129,11 @@ export default function QuestionForm({ id }: { id?: string }) {
                     </div>
                 </div>
                 <div className="w-full px-3 mb-6 flex justify-end">
-                    <button className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded"
-                        type="submit">
-                        Salvar
+                    <button className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded flex"
+                        type="submit"
+                        disabled={saving}>
+                        {saving ? <span className="mr-3"><Spinner /></span> : null}
+                        <span>Salvar</span>
                     </button>
                 </div>
             </div>

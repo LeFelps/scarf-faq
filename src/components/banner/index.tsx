@@ -1,6 +1,6 @@
 import { StaticImageData } from "next/image"
 import { Poppins } from "next/font/google"
-import Navbar from "../navbar"
+import Navbar from "../navigation/navbar"
 
 const poppins = Poppins({ subsets: ['latin'], weight: '700' })
 

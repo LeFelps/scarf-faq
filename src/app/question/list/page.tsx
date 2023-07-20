@@ -1,6 +1,6 @@
 import PageContent from "@/components/layout/content";
 import PageTitle from "@/components/layout/page-title";
-import Navbar from "@/components/navbar";
+import Navbar from "@/components/navigation/navbar";
 import QuestionListing from "@/components/question/listing";
 
 export default function QuestionList() {

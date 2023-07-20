@@ -17,11 +17,11 @@ export default function Faq() {
     function renderQuestion(question: Question, mainSection: boolean, indexString: string) {
         return (
             <Accordion title={indexString + " - " + question.title} bottomLine={mainSection}>
-                <span className="text-xl">{question.description}</span>
+                <span className="text-xl ml-2">{question.description}</span>
                 {question.children ?
                     <>
                         {question.children.map((child, index) =>
-                            <div key={child.id} className="pl-5 border-l mt-5" style={{ borderColor: "#584D66" }}>
+                            <div key={child._id} className="pl-5 border-l mt-5" style={{ borderColor: "#584D66" }}>
                                 {renderQuestion(child, false, indexString + "." + (index + 1))}
                             </div>
                         )}

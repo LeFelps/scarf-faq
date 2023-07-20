@@ -1,8 +1,9 @@
 export interface Question {
-    id: string
+    _id: string
     title: string
     description: string
     parent?: string
+    __v: number
     children?: Question[]
 }
 
