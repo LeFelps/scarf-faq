@@ -17,7 +17,7 @@ export default function Banner({ image, title }: { image: StaticImageData, title
             height: '420px',
             color: "white",
         }} className="flex flex-col relative">
-            <Navbar />
+            <Navbar transparent/>
             <h1 className={`${poppins.className} text-7xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2`}>{title}</h1>
         </div>
     )
