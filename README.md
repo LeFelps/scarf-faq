@@ -1,6 +1,6 @@
 ## Setup do projeto (frontend)
 
-Apos clonar ou baixar o repositorio, execute os seguintes passos no prompt de comando no pasta root do projeto
+Após clonar ou baixar o repositorio, execute os seguintes passos no prompt de comando na pasta root do projeto
 
 ### Instalação
 
