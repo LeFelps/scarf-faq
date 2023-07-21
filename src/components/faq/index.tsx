@@ -17,7 +17,7 @@ export default function Faq() {
     function renderQuestion(question: Question, mainSection: boolean, indexString: string) {
         return (
             <Accordion title={indexString + " - " + question.title} bottomLine={mainSection}>
-                <span className="text-xl ml-2">{question.description}</span>
+                <p className="text-xl pl-4">{question.description}</p>
                 {question.children ?
                     <>
                         {question.children.map((child, index) =>
