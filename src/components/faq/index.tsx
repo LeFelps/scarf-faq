@@ -33,9 +33,13 @@ export default function Faq() {
 
     return (
         <>
-            {questions.map((question, index) => (
-                renderQuestion(question, true, (index + 1).toString())
-            ))}
+            {questions.length > 0 ?
+                questions.map((question, index) => (
+                    renderQuestion(question, true, (index + 1).toString())
+                ))
+                : <div className="flex justify-center">
+                    <span className="text-stone-500 font-black text-3xl">Ops! parece que nao existe nenhuma pergunta cadastrada!</span>
+                </div>}
         </>
     )
 }

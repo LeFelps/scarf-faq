@@ -1,14 +1,16 @@
 "use client";
 
-import Spinner from "@/components/spinner";
+import Button from "@/components/forms/button";
 import { Question } from "@/types/question";
 import { Dialog, Transition } from '@headlessui/react'
 import axios from "axios";
-import Link from "next/link";
 import { Fragment, useCallback, useEffect, useState } from "react";
 import { toast } from 'react-toastify'
+import { useRouter } from 'next/navigation'
 
 export default function QuestionListing() {
+
+    const router = useRouter()
 
     const [questions, setQuestions] = useState<Question[]>([])
     const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false)
@@ -55,18 +57,19 @@ export default function QuestionListing() {
                 <div className="mb-4 flex flex-row">
                     <span className="text-2xl text-bold">{indexString + " - " + question.title}</span>
                     <div className="ml-auto">
-                        <Link href={`/question/${question._id}`} className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded ml-4"
-                            type="submit">
-                            Editar
-                        </Link>
-                        <button className="bg-red-400 hover:bg-red-600 text-white font-bold py-2 px-4 rounded ml-4"
-                            type="submit"
+                        <Button type="submit" label="Editar"
+                            variant="purple"
+                            onClick={() => {
+                                router.push(`/question/${question._id}`)
+                            }}
+                        />
+                        <Button type="submit" label="Excluir" className="ml-2"
+                            variant="red"
                             onClick={() => {
                                 setSelectedQuestion(question)
                                 setShowDeleteModal(true)
-                            }}>
-                            Excluir
-                        </button>
+                            }}
+                        />
                     </div>
                 </div>
                 <span className="text-xl">{question.description}</span>
@@ -86,9 +89,12 @@ export default function QuestionListing() {
     return (
         <div>
 
-            {questions.map((question, index) => (
-                renderQuestion(question, (index + 1).toString())
-            ))}
+            {questions.length > 0 ?
+                questions.map((question, index) => (
+                    renderQuestion(question, (index + 1).toString())
+                )) : <div className="flex justify-center">
+                    <span className="text-stone-500 font-black text-3xl">Ops! parece que nao existe nenhuma pergunta cadastrada!</span>
+                </div>}
 
             <Transition appear show={showDeleteModal} as={Fragment}>
                 <Dialog as="div" className="relative z-10" onClose={() => closeDeleteQuestionModal()}>
@@ -138,9 +144,9 @@ export default function QuestionListing() {
                                             </>
                                             :
                                             <div className="flex justify-end">
-                                                <button
-                                                    type="button"
-                                                    className="inline-flex justify-center rounded-md border border-transparent px-4 py-2 text-sm font-medium border-red-500 text-red-500 hover:bg-red-500 hover:text-white focus-visible:ring-offset-2"
+                                                <Button label="Excluir"
+                                                    loading={deleting} disabled={deleting}
+                                                    outlined variant="red"
                                                     onClick={() => {
                                                         if (selectedQuestion?._id) deleteQuestion(selectedQuestion._id);
                                                         else {
@@ -148,11 +154,7 @@ export default function QuestionListing() {
                                                             setShowDeleteModal(false)
                                                         }
                                                     }}
-                                                    disabled={deleting}
-                                                >
-                                                    {deleting ? <span className="mr-3"><Spinner /></span> : null}
-                                                    Excluir
-                                                </button>
+                                                />
                                             </div>
                                         }
                                     </div>

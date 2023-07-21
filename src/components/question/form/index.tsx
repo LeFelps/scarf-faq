@@ -7,6 +7,10 @@ import { useEffect, useState } from "react";
 import { toast } from 'react-toastify'
 
 import { useRouter } from "next/navigation";
+import TextArea from "@/components/forms/input/textarea";
+import TextInput from "@/components/forms/input/text";
+import Select from "@/components/forms/input/select";
+import Button from "@/components/forms/button";
 
 export default function QuestionForm({ id }: { id?: string }) {
 
@@ -53,15 +57,16 @@ export default function QuestionForm({ id }: { id?: string }) {
             e.preventDefault()
             e.stopPropagation()
 
-            const type = id != null ? 'put' : 'post'
+            const type = id != null ? 'patch' : 'post'
 
             setSaving(true)
             axios[type](`${process.env.NEXT_PUBLIC_API_URL}/faq`, questionData)
                 .then((resp) => {
                     const newId = resp.data?._id
+                    console.log(resp.data)
                     setQuestionData(resp.data)
                     toast.success('Pergunta criada com sucesso!')
-                    router.push(`question/${newId}`)
+                    if (id == null) router.replace(`/question/${newId}`);
                 })
                 .catch((err) => {
                     console.error(err)
@@ -73,68 +78,54 @@ export default function QuestionForm({ id }: { id?: string }) {
         }}>
             <div className="flex flex-wrap -mx-3 mb-6">
                 <div className="w-full px-3 mb-6">
-                    {/* TODO - Componentizar inputs de formulario */}
-                    <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="title-input">
-                        Título
-                    </label>
-                    <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-                        id="title-input" type="text" placeholder="Titulo" required
+                    <TextInput
+                        label="Título"
+                        disabled={loadingQuestionData} required
                         value={questionData?.title}
-                        disabled={loadingQuestionData}
                         onChange={(e) => {
                             setQuestionData({
                                 ...questionData,
                                 title: e.target.value
                             })
-                        }} />
+                        }}
+                    />
                 </div>
                 <div className="w-full px-3 mb-6">
-                    <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="description-input">
-                        Descrição
-                    </label>
-                    <textarea className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-                        id="description-input" placeholder="Descricao" required
+                    <TextArea
+                        label="Descrição"
+                        disabled={loadingQuestionData} required
                         value={questionData?.description}
-                        disabled={loadingQuestionData}
                         onChange={(e) => {
                             setQuestionData({
                                 ...questionData,
                                 description: e.target.value
                             })
-                        }} />
+                        }}
+                    />
                 </div>
                 <div className="w-full px-3 mb-6">
-                    <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="parent-input">
-                        Seção Pai
-                    </label>
-                    <div className="relative">
-                        <select className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-                            id="parent-input"
-                            value={questionData?.parent}
-                            disabled={loadingQuestionData || loadingQuestions}
-                            onChange={(e) => {
-                                setQuestionData({
-                                    ...questionData,
-                                    parent: e.target.value
-                                })
-                            }} >
-                            <option value="">Selecione uma opção</option>
-                            {questions.map(question => (
-                                <option key={question._id} value={question._id}>{question.title}</option>
-                            ))}
-                        </select>
-                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                            <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
-                        </div>
-                    </div>
+                    <Select
+                        label="Seção Pai"
+                        disabled={loadingQuestionData || loadingQuestions}
+                        value={questionData?.parent || ""}
+                        onChange={(e) => {
+                            setQuestionData({
+                                ...questionData,
+                                parent: e.target.value
+                            })
+                        }}
+                    >
+                        <option value="">Selecione uma opção</option>
+                        {questions.map(question => (
+                            <option key={question._id} value={question._id}>{question.title}</option>
+                        ))}
+                    </Select>
                 </div>
                 <div className="w-full px-3 mb-6 flex justify-end">
-                    <button className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded flex"
-                        type="submit"
-                        disabled={saving}>
-                        {saving ? <span className="mr-3"><Spinner /></span> : null}
-                        <span>Salvar</span>
-                    </button>
+                    <Button type="submit" label="Salvar" className="ml-2"
+                        loading={saving} disabled={saving}
+                        variant="purple"
+                    />
                 </div>
             </div>
         </form>
