@@ -6,7 +6,7 @@ export default function Accordion({ title, bottomLine, children, ...props }: { t
     const [open, setOpen] = useState<boolean>(false)
 
     return (
-        <div style={{ borderColor: "#584D66" }} className={`flex flex-col w-full py-4 ${bottomLine ? ' border-b ' : null}`} {...props}>
+        <div style={{ borderColor: "#584D66" }} className={`flex flex-col w-full ${bottomLine ? ' border-b py-4 ' : 'pt-4'}`} {...props}>
             <button className="flex flex-row flex-grow px-4" type="button" onClick={() => setOpen(!open)}>
                 <span className="font-bold text-xl text-left flex-grow">{title}</span>
                 <div style={{
