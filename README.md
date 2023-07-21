@@ -1,34 +1,37 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Setup do projeto (frontend)
 
-## Getting Started
+Após clonar ou baixar o repositorio, execute os seguintes passos no prompt de comando na pasta root do projeto
 
-First, run the development server:
+### Instalação
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+# instalação de dependências
+yarn
+#ou
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Rodando o projeto
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# script para rodar o projeto em desenvolvimento 
+yarn dev
+#ou
+npm run dev
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+# script para fazer o build e rodar o projeto
+yarn build && yarn start
+#ou
+npm run dev && npm run start
 
-## Learn More
+```
 
-To learn more about Next.js, take a look at the following resources:
+Após executado, o projeto será acessivel em [http://localhost:3000](http://localhost:3000).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+***IMPORTANTE*** <br/> 
+O projeto requer que a api esteja rodando para funcionar corretamente. Siga os passos do backend.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Backend
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+O backend desse projeto está separado em [outro repositorio](https://github.com/LeFelps/scarf-faq-backend). <br/>
+É necessário rodar os dois projetos simultaneamente.
